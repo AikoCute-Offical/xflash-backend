@@ -2,8 +2,9 @@ package panel
 
 import (
 	"fmt"
-	"github.com/goccy/go-json"
 	"strconv"
+
+	"github.com/goccy/go-json"
 )
 
 type OnlineUser struct {
@@ -51,9 +52,9 @@ func (c *Client) GetUserList() (UserList []UserInfo, err error) {
 	case "V2ray":
 		path = "/api/v1/server/Deepbwork/user"
 	case "Trojan":
-		path = "/api/v1/server/TrojanTidalab/user"
+		path = "/api/v1/server/Trojan/user"
 	case "Shadowsocks":
-		path = "/api/v1/server/ShadowsocksTidalab/user"
+		path = "/api/v1/server/Shadowsocks/user"
 	default:
 		return nil, fmt.Errorf("unsupported Node type: %s", c.NodeType)
 	}
@@ -85,9 +86,9 @@ func (c *Client) ReportUserTraffic(userTraffic []UserTraffic) error {
 	case "V2ray":
 		path = "/api/v1/server/Deepbwork/submit"
 	case "Trojan":
-		path = "/api/v1/server/TrojanTidalab/submit"
+		path = "/api/v1/server/Trojan/submit"
 	case "Shadowsocks":
-		path = "/api/v1/server/ShadowsocksTidalab/submit"
+		path = "/api/v1/server/Shadowsocks/submit"
 	}
 
 	data := make([]UserTraffic, len(userTraffic))

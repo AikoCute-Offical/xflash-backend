@@ -5,12 +5,13 @@ import (
 	"bytes"
 	md52 "crypto/md5"
 	"fmt"
-	"github.com/go-resty/resty/v2"
-	"github.com/goccy/go-json"
-	"github.com/xtls/xray-core/infra/conf"
 	"log"
 	"os"
 	"regexp"
+
+	"github.com/go-resty/resty/v2"
+	"github.com/goccy/go-json"
+	"github.com/xtls/xray-core/infra/conf"
 )
 
 type DetectRule struct {
@@ -106,7 +107,7 @@ func (c *Client) GetNodeInfo() (nodeInfo *NodeInfo, err error) {
 	case "V2ray":
 		path = "/api/v1/server/Deepbwork/config"
 	case "Trojan":
-		path = "/api/v1/server/TrojanTidalab/config"
+		path = "/api/v1/server/Trojan/config"
 	case "Shadowsocks":
 		if nodeInfo, err = c.ParseSSNodeResponse(); err == nil {
 			return nodeInfo, nil
