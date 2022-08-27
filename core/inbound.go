@@ -4,8 +4,8 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/Yuzuki616/V2bX/api/xflash"
-	"github.com/Yuzuki616/V2bX/core/app/dispatcher"
+	"github.com/AikoCute-Offical/xflash-backend/api/xflash"
+	"github.com/AikoCute-Offical/xflash-backend/core/app/dispatcher"
 	"github.com/xtls/xray-core/core"
 	"github.com/xtls/xray-core/features/inbound"
 )
