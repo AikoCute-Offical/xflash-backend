@@ -11,7 +11,7 @@ import (
 	"strings"
 	"syscall"
 
-	"github.com/AikoCute-Offical/xflash-backend/api/xflash"
+	"github.com/AikoCute-Offical/xflash-backend/api/panel"
 	"github.com/AikoCute-Offical/xflash-backend/conf"
 	"github.com/AikoCute-Offical/xflash-backend/core"
 	"github.com/AikoCute-Offical/xflash-backend/node"
@@ -24,9 +24,9 @@ var (
 )
 
 var (
-	version  = "v0.0.1"
-	codename = "AikoCute-Offical"
-	intro    = "A Xflash backend based on Xray-core"
+	version  = "0.0.2"
+	codename = "xflash"
+	intro    = "Xflashx backend based on Xray-core"
 )
 
 func showVersion() {
@@ -61,7 +61,7 @@ func getConfig() *viper.Viper {
 
 func startNodes(nodes []*conf.NodeConfig, core *core.Core) error {
 	for i, _ := range nodes {
-		var apiClient = xflash.New(nodes[i].ApiConfig)
+		var apiClient = panel.New(nodes[i].ApiConfig)
 		// Register controller service
 		err := node.New(core, apiClient, nodes[i].ControllerConfig).Start()
 		if err != nil {

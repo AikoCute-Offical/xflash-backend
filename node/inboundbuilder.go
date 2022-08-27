@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/AikoCute-Offical/xflash-backend/api/xflash"
+	"github.com/AikoCute-Offical/xflash-backend/api/panel"
 	"github.com/AikoCute-Offical/xflash-backend/conf"
 	"github.com/AikoCute-Offical/xflash-backend/node/legoCmd"
 	"github.com/xtls/xray-core/common/net"
@@ -15,7 +15,7 @@ import (
 )
 
 //InboundBuilder build Inbound config for different protocol
-func InboundBuilder(config *conf.ControllerConfig, nodeInfo *xflash.NodeInfo, tag string) (*core.InboundHandlerConfig, error) {
+func InboundBuilder(config *conf.ControllerConfig, nodeInfo *panel.NodeInfo, tag string) (*core.InboundHandlerConfig, error) {
 	var proxySetting interface{}
 	if nodeInfo.NodeType == "V2ray" {
 		defer func() {
@@ -48,7 +48,7 @@ func InboundBuilder(config *conf.ControllerConfig, nodeInfo *xflash.NodeInfo, ta
 			nodeInfo.V2ray = nil
 			nodeInfo.Trojan = nil
 		}()
-		nodeInfo.V2ray = &xflash.V2rayConfig{}
+		nodeInfo.V2ray = &panel.V2rayConfig{}
 		nodeInfo.V2ray.Inbounds = make([]coreConf.InboundDetourConfig, 1)
 		nodeInfo.V2ray.Inbounds[0].Protocol = "trojan"
 		// Enable fallback
@@ -73,7 +73,7 @@ func InboundBuilder(config *conf.ControllerConfig, nodeInfo *xflash.NodeInfo, ta
 		defer func() {
 			nodeInfo.V2ray = nil
 		}()
-		nodeInfo.V2ray = &xflash.V2rayConfig{}
+		nodeInfo.V2ray = &panel.V2rayConfig{}
 		nodeInfo.V2ray.Inbounds = []coreConf.InboundDetourConfig{{Protocol: "shadowsocks"}}
 		proxySetting = &coreConf.ShadowsocksServerConfig{}
 		randomPasswd := uuid.New()

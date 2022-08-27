@@ -1,7 +1,7 @@
 // Package api contains all the api used by XrayR
 // To implement an api , one needs to implement the interface below.
 
-package xflash
+package panel
 
 import (
 	"log"
@@ -12,6 +12,8 @@ import (
 	"github.com/AikoCute-Offical/xflash-backend/conf"
 	"github.com/go-resty/resty/v2"
 )
+
+// Panel is the interface for different panel's api.
 
 type ClientInfo struct {
 	APIHost  string
@@ -38,7 +40,7 @@ type Client struct {
 	NodeRuleRspMd5  [16]byte
 }
 
-func New(apiConfig *conf.ApiConfig) xflash {
+func New(apiConfig *conf.ApiConfig) Panel {
 	client := resty.New()
 	client.SetRetryCount(3)
 	if apiConfig.Timeout > 0 {

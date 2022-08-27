@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/AikoCute-Offical/xflash-backend/api/xflash"
+	"github.com/AikoCute-Offical/xflash-backend/api/panel"
 	conf2 "github.com/AikoCute-Offical/xflash-backend/conf"
 
 	"github.com/xtls/xray-core/common/net"
@@ -13,7 +13,7 @@ import (
 )
 
 //OutboundBuilder build freedom outbund config for addoutbound
-func OutboundBuilder(config *conf2.ControllerConfig, nodeInfo *xflash.NodeInfo, tag string) (*core.OutboundHandlerConfig, error) {
+func OutboundBuilder(config *conf2.ControllerConfig, nodeInfo *panel.NodeInfo, tag string) (*core.OutboundHandlerConfig, error) {
 	outboundDetourConfig := &conf.OutboundDetourConfig{}
 	outboundDetourConfig.Protocol = "freedom"
 	outboundDetourConfig.Tag = tag

@@ -1,8 +1,7 @@
-package xflash
+package panel
 
 import (
 	"fmt"
-
 	"github.com/go-resty/resty/v2"
 )
 

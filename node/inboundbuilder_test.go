@@ -3,12 +3,12 @@ package node_test
 import (
 	"testing"
 
-	"github.com/AikoCute-Offical/xflash-backend/api/xflash"
+	"github.com/AikoCute-Offical/xflash-backend/api/panel"
 	. "github.com/AikoCute-Offical/xflash-backend/node"
 )
 
 func TestBuildV2ray(t *testing.T) {
-	nodeInfo := &xflash.NodeInfo{
+	nodeInfo := &panel.NodeInfo{
 		NodeType:          "V2ray",
 		NodeID:            1,
 		Port:              1145,
@@ -36,7 +36,7 @@ func TestBuildV2ray(t *testing.T) {
 }
 
 func TestBuildTrojan(t *testing.T) {
-	nodeInfo := &xflash.NodeInfo{
+	nodeInfo := &panel.NodeInfo{
 		NodeType:          "Trojan",
 		NodeID:            1,
 		Port:              1145,
@@ -68,7 +68,7 @@ func TestBuildTrojan(t *testing.T) {
 }
 
 func TestBuildSS(t *testing.T) {
-	nodeInfo := &xflash.NodeInfo{
+	nodeInfo := &panel.NodeInfo{
 		NodeType:          "Shadowsocks",
 		NodeID:            1,
 		Port:              1145,

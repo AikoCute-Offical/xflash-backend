@@ -1,10 +1,9 @@
-package xflash
+package panel
 
 import (
 	"fmt"
-	"strconv"
-
 	"github.com/goccy/go-json"
+	"strconv"
 )
 
 type OnlineUser struct {
@@ -45,7 +44,7 @@ type UserListBody struct {
 	Data []UserInfo `json:"data"`
 }
 
-// GetUserList will pull user form ssxflash
+// GetUserList will pull user form sspanel
 func (c *Client) GetUserList() (UserList []UserInfo, err error) {
 	var path string
 	switch c.NodeType {

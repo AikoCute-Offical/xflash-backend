@@ -8,7 +8,7 @@ import (
 	"runtime"
 	"time"
 
-	"github.com/AikoCute-Offical/xflash-backend/api/xflash"
+	"github.com/AikoCute-Offical/xflash-backend/api/panel"
 	"github.com/AikoCute-Offical/xflash-backend/conf"
 	"github.com/AikoCute-Offical/xflash-backend/core"
 	"github.com/AikoCute-Offical/xflash-backend/core/app/dispatcher"
@@ -22,18 +22,18 @@ import (
 type Node struct {
 	server                  *core.Core
 	config                  *conf.ControllerConfig
-	clientInfo              xflash.ClientInfo
-	apiClient               xflash.xflash
-	nodeInfo                *xflash.NodeInfo
+	clientInfo              panel.ClientInfo
+	apiClient               panel.Panel
+	nodeInfo                *panel.NodeInfo
 	Tag                     string
-	userList                []xflash.UserInfo
+	userList                []panel.UserInfo
 	nodeInfoMonitorPeriodic *task.Periodic
 	userReportPeriodic      *task.Periodic
 	onlineIpReportPeriodic  *task.Periodic
 }
 
 // New return a Node service with default parameters.
-func New(server *core.Core, api xflash.xflash, config *conf.ControllerConfig) *Node {
+func New(server *core.Core, api panel.Panel, config *conf.ControllerConfig) *Node {
 	controller := &Node{
 		server:    server,
 		config:    config,
@@ -282,7 +282,7 @@ func (c *Node) removeOldTag(oldtag string) (err error) {
 	return nil
 }
 
-func (c *Node) addNewTag(newNodeInfo *xflash.NodeInfo) (err error) {
+func (c *Node) addNewTag(newNodeInfo *panel.NodeInfo) (err error) {
 	inboundConfig, err := InboundBuilder(c.config, newNodeInfo, c.Tag)
 	if err != nil {
 		return err
@@ -305,7 +305,7 @@ func (c *Node) addNewTag(newNodeInfo *xflash.NodeInfo) (err error) {
 	return nil
 }
 
-func (c *Node) addNewUser(userInfo []xflash.UserInfo, nodeInfo *xflash.NodeInfo) (err error) {
+func (c *Node) addNewUser(userInfo []panel.UserInfo, nodeInfo *panel.NodeInfo) (err error) {
 	users := make([]*protocol.User, 0)
 	if nodeInfo.NodeType == "V2ray" {
 		if nodeInfo.EnableVless {
@@ -335,7 +335,7 @@ func (c *Node) addNewUser(userInfo []xflash.UserInfo, nodeInfo *xflash.NodeInfo)
 	return nil
 }
 
-func compareUserList(old, new []xflash.UserInfo) (deleted, added []xflash.UserInfo) {
+func compareUserList(old, new []panel.UserInfo) (deleted, added []panel.UserInfo) {
 	tmp := map[string]struct{}{}
 	tmp2 := map[string]struct{}{}
 	for i := range old {
@@ -365,11 +365,11 @@ func compareUserList(old, new []xflash.UserInfo) (deleted, added []xflash.UserIn
 
 func (c *Node) userInfoMonitor() (err error) {
 	// Get User traffic
-	userTraffic := make([]xflash.UserTraffic, 0)
+	userTraffic := make([]panel.UserTraffic, 0)
 	for i := range c.userList {
 		up, down := c.server.GetUserTraffic(c.buildUserTag(&(c.userList)[i]))
 		if up > 0 || down > 0 {
-			userTraffic = append(userTraffic, xflash.UserTraffic{
+			userTraffic = append(userTraffic, panel.UserTraffic{
 				UID:      (c.userList)[i].UID,
 				Upload:   up,
 				Download: down})

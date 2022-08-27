@@ -1,17 +1,3 @@
-Log:
-  Level: none
-  AccessPath: 
-  ErrorPath: 
-DnsConfigPath: 
-RouteConfigPath: 
-InboundConfigPath: 
-OutboundConfigPath: 
-ConnetionConfig:
-  Handshake: 4 
-  ConnIdle: 30 
-  UplinkOnly: 2 
-  DownlinkOnly: 4 
-  BufferSize: 64 
 Nodes:
   -
     ApiConfig:

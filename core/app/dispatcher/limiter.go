@@ -7,7 +7,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/AikoCute-Offical/xflash-backend/api/xflash"
+	"github.com/AikoCute-Offical/xflash-backend/api/panel"
 	"github.com/juju/ratelimit"
 	"github.com/xtls/xray-core/common"
 	"github.com/xtls/xray-core/common/buf"
@@ -37,7 +37,7 @@ func NewLimiter() *Limiter {
 	}
 }
 
-func (l *Limiter) AddInboundLimiter(tag string, nodeInfo *xflash.NodeInfo, userList []xflash.UserInfo) error {
+func (l *Limiter) AddInboundLimiter(tag string, nodeInfo *panel.NodeInfo, userList []panel.UserInfo) error {
 	inboundInfo := &InboundInfo{
 		Tag:            tag,
 		NodeSpeedLimit: nodeInfo.SpeedLimit,
@@ -64,7 +64,7 @@ func (l *Limiter) AddInboundLimiter(tag string, nodeInfo *xflash.NodeInfo, userL
 	return nil
 }
 
-func (l *Limiter) UpdateInboundLimiter(tag string, nodeInfo *xflash.NodeInfo, updatedUserList []xflash.UserInfo) error {
+func (l *Limiter) UpdateInboundLimiter(tag string, nodeInfo *panel.NodeInfo, updatedUserList []panel.UserInfo) error {
 	if value, ok := l.InboundInfo.Load(tag); ok {
 		inboundInfo := value.(*InboundInfo)
 		// Update User info

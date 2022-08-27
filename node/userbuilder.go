@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/AikoCute-Offical/xflash-backend/api/xflash"
+	"github.com/AikoCute-Offical/xflash-backend/api/panel"
 
 	"github.com/xtls/xray-core/common/protocol"
 	"github.com/xtls/xray-core/common/serial"
@@ -14,7 +14,7 @@ import (
 	"github.com/xtls/xray-core/proxy/vless"
 )
 
-func (c *Node) buildVmessUsers(userInfo []xflash.UserInfo, serverAlterID uint16) (users []*protocol.User) {
+func (c *Node) buildVmessUsers(userInfo []panel.UserInfo, serverAlterID uint16) (users []*protocol.User) {
 	users = make([]*protocol.User, len(userInfo))
 	for i, user := range userInfo {
 		users[i] = c.buildVmessUser(&user, serverAlterID)
@@ -22,7 +22,7 @@ func (c *Node) buildVmessUsers(userInfo []xflash.UserInfo, serverAlterID uint16)
 	return users
 }
 
-func (c *Node) buildVmessUser(userInfo *xflash.UserInfo, serverAlterID uint16) (user *protocol.User) {
+func (c *Node) buildVmessUser(userInfo *panel.UserInfo, serverAlterID uint16) (user *protocol.User) {
 	vmessAccount := &conf.VMessAccount{
 		ID:       userInfo.V2rayUser.Uuid,
 		AlterIds: serverAlterID,
@@ -36,7 +36,7 @@ func (c *Node) buildVmessUser(userInfo *xflash.UserInfo, serverAlterID uint16) (
 	return user
 }
 
-func (c *Node) buildVlessUsers(userInfo []xflash.UserInfo) (users []*protocol.User) {
+func (c *Node) buildVlessUsers(userInfo []panel.UserInfo) (users []*protocol.User) {
 	users = make([]*protocol.User, len(userInfo))
 	for i := range userInfo {
 		users[i] = c.buildVlessUser(&(userInfo)[i])
@@ -44,7 +44,7 @@ func (c *Node) buildVlessUsers(userInfo []xflash.UserInfo) (users []*protocol.Us
 	return users
 }
 
-func (c *Node) buildVlessUser(userInfo *xflash.UserInfo) (user *protocol.User) {
+func (c *Node) buildVlessUser(userInfo *panel.UserInfo) (user *protocol.User) {
 	vlessAccount := &vless.Account{
 		Id:   userInfo.V2rayUser.Uuid,
 		Flow: "xtls-rprx-direct",
@@ -57,7 +57,7 @@ func (c *Node) buildVlessUser(userInfo *xflash.UserInfo) (user *protocol.User) {
 	return user
 }
 
-func (c *Node) buildTrojanUsers(userInfo []xflash.UserInfo) (users []*protocol.User) {
+func (c *Node) buildTrojanUsers(userInfo []panel.UserInfo) (users []*protocol.User) {
 	users = make([]*protocol.User, len(userInfo))
 	for i := range userInfo {
 		users[i] = c.buildTrojanUser(&(userInfo)[i])
@@ -65,7 +65,7 @@ func (c *Node) buildTrojanUsers(userInfo []xflash.UserInfo) (users []*protocol.U
 	return users
 }
 
-func (c *Node) buildTrojanUser(userInfo *xflash.UserInfo) (user *protocol.User) {
+func (c *Node) buildTrojanUser(userInfo *panel.UserInfo) (user *protocol.User) {
 	trojanAccount := &trojan.Account{
 		Password: userInfo.TrojanUser.Password,
 		Flow:     "xtls-rprx-direct",
@@ -93,7 +93,7 @@ func getCipherFromString(c string) shadowsocks.CipherType {
 	}
 }
 
-func (c *Node) buildSSUsers(userInfo []xflash.UserInfo, cypher shadowsocks.CipherType) (users []*protocol.User) {
+func (c *Node) buildSSUsers(userInfo []panel.UserInfo, cypher shadowsocks.CipherType) (users []*protocol.User) {
 	users = make([]*protocol.User, len(userInfo))
 	for i := range userInfo {
 		c.buildSSUser(&(userInfo)[i], cypher)
@@ -101,7 +101,7 @@ func (c *Node) buildSSUsers(userInfo []xflash.UserInfo, cypher shadowsocks.Ciphe
 	return users
 }
 
-func (c *Node) buildSSUser(userInfo *xflash.UserInfo, cypher shadowsocks.CipherType) (user *protocol.User) {
+func (c *Node) buildSSUser(userInfo *panel.UserInfo, cypher shadowsocks.CipherType) (user *protocol.User) {
 	ssAccount := &shadowsocks.Account{
 		Password:   userInfo.Secret,
 		CipherType: cypher,
@@ -114,6 +114,6 @@ func (c *Node) buildSSUser(userInfo *xflash.UserInfo, cypher shadowsocks.CipherT
 	return user
 }
 
-func (c *Node) buildUserTag(user *xflash.UserInfo) string {
+func (c *Node) buildUserTag(user *panel.UserInfo) string {
 	return fmt.Sprintf("%s|%s|%d", c.Tag, user.GetUserEmail(), user.UID)
 }

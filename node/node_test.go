@@ -8,7 +8,7 @@ import (
 	"syscall"
 	"testing"
 
-	"github.com/AikoCute-Offical/xflash-backend/api/xflash"
+	"github.com/AikoCute-Offical/xflash-backend/api/panel"
 	. "github.com/AikoCute-Offical/xflash-backend/node"
 
 	"github.com/AikoCute-Offical/xflash-backend/api"
@@ -29,6 +29,14 @@ func TestController(t *testing.T) {
 	}}
 	serverConfig.Policy = policyConfig
 	config, _ := serverConfig.Build()
+
+	// config := &core.Config{
+	// 	App: []*serial.TypedMessage{
+	// 		serial.ToTypedMessage(&dispatcher.Config{}),
+	// 		serial.ToTypedMessage(&proxyman.InboundConfig{}),
+	// 		serial.ToTypedMessage(&proxyman.OutboundConfig{}),
+	// 		serial.ToTypedMessage(&stats.Config{}),
+	// 	}}
 
 	server, err := core.New(config)
 	defer server.Close()
@@ -54,7 +62,7 @@ func TestController(t *testing.T) {
 		NodeID:   41,
 		NodeType: "V2ray",
 	}
-	apiclient := xflash.New(apiConfig)
+	apiclient := panel.New(apiConfig)
 	c := New(server, apiclient, controlerconfig)
 	fmt.Println("Sleep 1s")
 	err = c.Start()

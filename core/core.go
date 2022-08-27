@@ -45,20 +45,20 @@ func parseConnectionConfig(c *conf.ConnetionConfig) (policy *coreConf.Policy) {
 	return
 }
 
-func getCore(AikoCute-OfficalConfig *conf.Conf) *core.Instance {
+func getCore(xflashConfig *conf.Conf) *core.Instance {
 	// Log Config
 	coreLogConfig := &coreConf.LogConfig{}
-	coreLogConfig.LogLevel = AikoCute-OfficalConfig.LogConfig.Level
-	coreLogConfig.AccessLog = AikoCute-OfficalConfig.LogConfig.AccessPath
-	coreLogConfig.ErrorLog = AikoCute-OfficalConfig.LogConfig.ErrorPath
+	coreLogConfig.LogLevel = xflashConfig.LogConfig.Level
+	coreLogConfig.AccessLog = xflashConfig.LogConfig.AccessPath
+	coreLogConfig.ErrorLog = xflashConfig.LogConfig.ErrorPath
 	// DNS config
 	coreDnsConfig := &coreConf.DNSConfig{}
-	if AikoCute-OfficalConfig.DnsConfigPath != "" {
-		if data, err := io.ReadFile(AikoCute-OfficalConfig.DnsConfigPath); err != nil {
-			log.Panicf("Failed to read DNS config file at: %s", AikoCute-OfficalConfig.DnsConfigPath)
+	if xflashConfig.DnsConfigPath != "" {
+		if data, err := io.ReadFile(xflashConfig.DnsConfigPath); err != nil {
+			log.Panicf("Failed to read DNS config file at: %s", xflashConfig.DnsConfigPath)
 		} else {
 			if err = json.Unmarshal(data, coreDnsConfig); err != nil {
-				log.Panicf("Failed to unmarshal DNS config: %s", AikoCute-OfficalConfig.DnsConfigPath)
+				log.Panicf("Failed to unmarshal DNS config: %s", xflashConfig.DnsConfigPath)
 			}
 		}
 	}
@@ -68,12 +68,12 @@ func getCore(AikoCute-OfficalConfig *conf.Conf) *core.Instance {
 	}
 	// Routing config
 	coreRouterConfig := &coreConf.RouterConfig{}
-	if AikoCute-OfficalConfig.RouteConfigPath != "" {
-		if data, err := io.ReadFile(AikoCute-OfficalConfig.RouteConfigPath); err != nil {
-			log.Panicf("Failed to read Routing config file at: %s", AikoCute-OfficalConfig.RouteConfigPath)
+	if xflashConfig.RouteConfigPath != "" {
+		if data, err := io.ReadFile(xflashConfig.RouteConfigPath); err != nil {
+			log.Panicf("Failed to read Routing config file at: %s", xflashConfig.RouteConfigPath)
 		} else {
 			if err = json.Unmarshal(data, coreRouterConfig); err != nil {
-				log.Panicf("Failed to unmarshal Routing config: %s", AikoCute-OfficalConfig.RouteConfigPath)
+				log.Panicf("Failed to unmarshal Routing config: %s", xflashConfig.RouteConfigPath)
 			}
 		}
 	}
@@ -83,12 +83,12 @@ func getCore(AikoCute-OfficalConfig *conf.Conf) *core.Instance {
 	}
 	// Custom Inbound config
 	var coreCustomInboundConfig []coreConf.InboundDetourConfig
-	if AikoCute-OfficalConfig.InboundConfigPath != "" {
-		if data, err := io.ReadFile(AikoCute-OfficalConfig.InboundConfigPath); err != nil {
-			log.Panicf("Failed to read Custom Inbound config file at: %s", AikoCute-OfficalConfig.OutboundConfigPath)
+	if xflashConfig.InboundConfigPath != "" {
+		if data, err := io.ReadFile(xflashConfig.InboundConfigPath); err != nil {
+			log.Panicf("Failed to read Custom Inbound config file at: %s", xflashConfig.OutboundConfigPath)
 		} else {
 			if err = json.Unmarshal(data, &coreCustomInboundConfig); err != nil {
-				log.Panicf("Failed to unmarshal Custom Inbound config: %s", AikoCute-OfficalConfig.OutboundConfigPath)
+				log.Panicf("Failed to unmarshal Custom Inbound config: %s", xflashConfig.OutboundConfigPath)
 			}
 		}
 	}
@@ -102,12 +102,12 @@ func getCore(AikoCute-OfficalConfig *conf.Conf) *core.Instance {
 	}
 	// Custom Outbound config
 	var coreCustomOutboundConfig []coreConf.OutboundDetourConfig
-	if AikoCute-OfficalConfig.OutboundConfigPath != "" {
-		if data, err := io.ReadFile(AikoCute-OfficalConfig.OutboundConfigPath); err != nil {
-			log.Panicf("Failed to read Custom Outbound config file at: %s", AikoCute-OfficalConfig.OutboundConfigPath)
+	if xflashConfig.OutboundConfigPath != "" {
+		if data, err := io.ReadFile(xflashConfig.OutboundConfigPath); err != nil {
+			log.Panicf("Failed to read Custom Outbound config file at: %s", xflashConfig.OutboundConfigPath)
 		} else {
 			if err = json.Unmarshal(data, &coreCustomOutboundConfig); err != nil {
-				log.Panicf("Failed to unmarshal Custom Outbound config: %s", AikoCute-OfficalConfig.OutboundConfigPath)
+				log.Panicf("Failed to unmarshal Custom Outbound config: %s", xflashConfig.OutboundConfigPath)
 			}
 		}
 	}
@@ -120,7 +120,7 @@ func getCore(AikoCute-OfficalConfig *conf.Conf) *core.Instance {
 		outBoundConfig = append(outBoundConfig, oc)
 	}
 	// Policy config
-	levelPolicyConfig := parseConnectionConfig(AikoCute-OfficalConfig.ConnectionConfig)
+	levelPolicyConfig := parseConnectionConfig(xflashConfig.ConnectionConfig)
 	corePolicyConfig := &coreConf.PolicyConfig{}
 	corePolicyConfig.Levels = map[uint32]*coreConf.Policy{0: levelPolicyConfig}
 	policyConfig, _ := corePolicyConfig.Build()
@@ -152,7 +152,7 @@ func getCore(AikoCute-OfficalConfig *conf.Conf) *core.Instance {
 func (p *Core) Start() {
 	p.access.Lock()
 	defer p.access.Unlock()
-	log.Print("Start the xflash..")
+	log.Print("Start the panel..")
 	if err := p.Server.Start(); err != nil {
 		log.Panicf("Failed to start instance: %s", err)
 	}

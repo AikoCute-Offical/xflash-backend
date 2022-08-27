@@ -1,17 +1,16 @@
-package xflash
+package panel
 
 import (
 	"bufio"
 	"bytes"
 	md52 "crypto/md5"
 	"fmt"
-	"log"
-	"os"
-	"regexp"
-
 	"github.com/go-resty/resty/v2"
 	"github.com/goccy/go-json"
 	"github.com/xtls/xray-core/infra/conf"
+	"log"
+	"os"
+	"regexp"
 )
 
 type DetectRule struct {
@@ -99,7 +98,7 @@ type TrojanConfig struct {
 	} `json:"ssl"`
 }
 
-// GetNodeInfo will pull NodeInfo Config from ssxflash
+// GetNodeInfo will pull NodeInfo Config from sspanel
 func (c *Client) GetNodeInfo() (nodeInfo *NodeInfo, err error) {
 	var path string
 	var res *resty.Response

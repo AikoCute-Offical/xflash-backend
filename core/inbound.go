@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/AikoCute-Offical/xflash-backend/api/xflash"
+	"github.com/AikoCute-Offical/xflash-backend/api/panel"
 	"github.com/AikoCute-Offical/xflash-backend/core/app/dispatcher"
 	"github.com/xtls/xray-core/core"
 	"github.com/xtls/xray-core/features/inbound"
@@ -30,7 +30,7 @@ func (p *Core) AddInbound(config *core.InboundHandlerConfig) error {
 	return nil
 }
 
-func (p *Core) AddInboundLimiter(tag string, nodeInfo *xflash.NodeInfo, userList []xflash.UserInfo) error {
+func (p *Core) AddInboundLimiter(tag string, nodeInfo *panel.NodeInfo, userList []panel.UserInfo) error {
 	err := p.dispatcher.Limiter.AddInboundLimiter(tag, nodeInfo, userList)
 	return err
 }
@@ -43,7 +43,7 @@ func (p *Core) GetInboundLimiter(tag string) (*dispatcher.InboundInfo, error) {
 	return nil, fmt.Errorf("not found limiter")
 }
 
-func (p *Core) UpdateInboundLimiter(tag string, nodeInfo *xflash.NodeInfo, updatedUserList []xflash.UserInfo) error {
+func (p *Core) UpdateInboundLimiter(tag string, nodeInfo *panel.NodeInfo, updatedUserList []panel.UserInfo) error {
 	err := p.dispatcher.Limiter.UpdateInboundLimiter(tag, nodeInfo, updatedUserList)
 	return err
 }
