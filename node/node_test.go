@@ -30,14 +30,6 @@ func TestController(t *testing.T) {
 	serverConfig.Policy = policyConfig
 	config, _ := serverConfig.Build()
 
-	// config := &core.Config{
-	// 	App: []*serial.TypedMessage{
-	// 		serial.ToTypedMessage(&dispatcher.Config{}),
-	// 		serial.ToTypedMessage(&proxyman.InboundConfig{}),
-	// 		serial.ToTypedMessage(&proxyman.OutboundConfig{}),
-	// 		serial.ToTypedMessage(&stats.Config{}),
-	// 	}}
-
 	server, err := core.New(config)
 	defer server.Close()
 	if err != nil {
