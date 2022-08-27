@@ -24,7 +24,7 @@ var (
 )
 
 var (
-	version  = "0.0.2"
+	version  = "0.0.1"
 	codename = "xflash"
 	intro    = "Xflashx backend based on Xray-core"
 )
