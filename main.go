@@ -21,8 +21,6 @@ var (
 )
 
 var (
-	codename = "xflash"
-	intro    = "Xflashx backend based on Xray-core"
 	version  = "v0.0.7_beta"
 	codename = "Xflash"
 	intro    = "A V2board backend based on Xray-core"
@@ -32,7 +30,6 @@ func showVersion() {
 	fmt.Printf("%s %s (%s) \n", codename, version, intro)
 }
 
-func getConfig() *viper.Viper {
 func startNodes(nodes []*conf.NodeConfig, core *core.Core) error {
 	for i := range nodes {
 		var apiClient = panel.New(nodes[i].ApiConfig)
