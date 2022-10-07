@@ -1,9 +1,8 @@
 package legoCmd_test
 
 import (
-	"testing"
-
 	"github.com/AikoCute-Offical/xflash-backend/node/legoCmd"
+	"testing"
 )
 
 func TestLegoClient(t *testing.T) {

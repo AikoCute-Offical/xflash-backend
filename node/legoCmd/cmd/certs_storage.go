@@ -4,14 +4,13 @@ import (
 	"bytes"
 	"crypto/x509"
 	"encoding/json"
+	"github.com/AikoCute-Offical/xflash-backend/node/legoCmd/log"
 	"io/ioutil"
 	"os"
 	"path/filepath"
 	"strconv"
 	"strings"
 	"time"
-
-	"github.com/AikoCute-Offical/xflash-backend/node/legoCmd/log"
 
 	"github.com/go-acme/lego/v4/certcrypto"
 	"github.com/go-acme/lego/v4/certificate"
@@ -28,16 +27,15 @@ const (
 //
 // rootPath:
 //
-//     ./.lego/certificates/
-//          │      └── root certificates directory
-//          └── "path" option
+//	./.lego/certificates/
+//	     │      └── root certificates directory
+//	     └── "path" option
 //
 // archivePath:
 //
-//     ./.lego/archives/
-//          │      └── archived certificates directory
-//          └── "path" option
-//
+//	./.lego/archives/
+//	     │      └── archived certificates directory
+//	     └── "path" option
 type CertificatesStorage struct {
 	rootPath    string
 	archivePath string

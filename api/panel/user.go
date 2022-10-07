@@ -2,9 +2,8 @@ package panel
 
 import (
 	"fmt"
-	"strconv"
-
 	"github.com/goccy/go-json"
+	"strconv"
 )
 
 type OnlineUser struct {
@@ -24,6 +23,7 @@ type UserInfo struct {
 	/*DeviceLimit int             `json:"device_limit"`
 	SpeedLimit  uint64          `json:"speed_limit"`*/
 	UID        int             `json:"id"`
+	Traffic    int64           `json:"-"`
 	Port       int             `json:"port"`
 	Cipher     string          `json:"cipher"`
 	Secret     string          `json:"secret"`
@@ -52,9 +52,9 @@ func (c *Client) GetUserList() (UserList []UserInfo, err error) {
 	case "V2ray":
 		path = "/api/v1/server/Deepbwork/user"
 	case "Trojan":
-		path = "/api/v1/server/Trojan/user"
+		path = "/api/v1/server/TrojanTidalab/user"
 	case "Shadowsocks":
-		path = "/api/v1/server/Shadowsocks/user"
+		path = "/api/v1/server/ShadowsocksTidalab/user"
 	default:
 		return nil, fmt.Errorf("unsupported Node type: %s", c.NodeType)
 	}
@@ -86,9 +86,9 @@ func (c *Client) ReportUserTraffic(userTraffic []UserTraffic) error {
 	case "V2ray":
 		path = "/api/v1/server/Deepbwork/submit"
 	case "Trojan":
-		path = "/api/v1/server/Trojan/submit"
+		path = "/api/v1/server/TrojanTidalab/submit"
 	case "Shadowsocks":
-		path = "/api/v1/server/Shadowsocks/submit"
+		path = "/api/v1/server/ShadowsocksTidalab/submit"
 	}
 
 	data := make([]UserTraffic, len(userTraffic))

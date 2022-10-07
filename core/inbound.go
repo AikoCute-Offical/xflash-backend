@@ -3,7 +3,6 @@ package core
 import (
 	"context"
 	"fmt"
-
 	"github.com/AikoCute-Offical/xflash-backend/api/panel"
 	"github.com/AikoCute-Offical/xflash-backend/core/app/dispatcher"
 	"github.com/xtls/xray-core/core"
@@ -11,8 +10,7 @@ import (
 )
 
 func (p *Core) RemoveInbound(tag string) error {
-	err := p.ihm.RemoveHandler(context.Background(), tag)
-	return err
+	return p.ihm.RemoveHandler(context.Background(), tag)
 }
 
 func (p *Core) AddInbound(config *core.InboundHandlerConfig) error {
@@ -30,9 +28,8 @@ func (p *Core) AddInbound(config *core.InboundHandlerConfig) error {
 	return nil
 }
 
-func (p *Core) AddInboundLimiter(tag string, nodeInfo *panel.NodeInfo, userList []panel.UserInfo) error {
-	err := p.dispatcher.Limiter.AddInboundLimiter(tag, nodeInfo, userList)
-	return err
+func (p *Core) AddInboundLimiter(tag string, nodeInfo *panel.NodeInfo) error {
+	return p.dispatcher.Limiter.AddInboundLimiter(tag, nodeInfo)
 }
 
 func (p *Core) GetInboundLimiter(tag string) (*dispatcher.InboundInfo, error) {
@@ -43,12 +40,14 @@ func (p *Core) GetInboundLimiter(tag string) (*dispatcher.InboundInfo, error) {
 	return nil, fmt.Errorf("not found limiter")
 }
 
-func (p *Core) UpdateInboundLimiter(tag string, nodeInfo *panel.NodeInfo, updatedUserList []panel.UserInfo) error {
-	err := p.dispatcher.Limiter.UpdateInboundLimiter(tag, nodeInfo, updatedUserList)
-	return err
+func (p *Core) UpdateInboundLimiter(tag string, deleted []panel.UserInfo) error {
+	return p.dispatcher.Limiter.UpdateInboundLimiter(tag, deleted)
 }
 
 func (p *Core) DeleteInboundLimiter(tag string) error {
-	err := p.dispatcher.Limiter.DeleteInboundLimiter(tag)
-	return err
+	return p.dispatcher.Limiter.DeleteInboundLimiter(tag)
+}
+
+func (p *Core) UpdateRule(tag string, newRuleList *panel.DetectRule) error {
+	return p.dispatcher.RuleManager.UpdateRule(tag, newRuleList)
 }

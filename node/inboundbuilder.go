@@ -4,7 +4,6 @@ package node
 import (
 	"encoding/json"
 	"fmt"
-
 	"github.com/AikoCute-Offical/xflash-backend/api/panel"
 	"github.com/AikoCute-Offical/xflash-backend/conf"
 	"github.com/AikoCute-Offical/xflash-backend/node/legoCmd"
@@ -14,7 +13,7 @@ import (
 	coreConf "github.com/xtls/xray-core/infra/conf"
 )
 
-//InboundBuilder build Inbound config for different protocol
+// InboundBuilder build Inbound config for different protocol
 func InboundBuilder(config *conf.ControllerConfig, nodeInfo *panel.NodeInfo, tag string) (*core.InboundHandlerConfig, error) {
 	var proxySetting interface{}
 	if nodeInfo.NodeType == "V2ray" {

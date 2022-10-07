@@ -6,27 +6,26 @@ import (
 	"log"
 	"os"
 	"os/signal"
-	"path"
 	"runtime"
-	"strings"
 	"syscall"
 
 	"github.com/AikoCute-Offical/xflash-backend/api/panel"
 	"github.com/AikoCute-Offical/xflash-backend/conf"
 	"github.com/AikoCute-Offical/xflash-backend/core"
 	"github.com/AikoCute-Offical/xflash-backend/node"
-	"github.com/spf13/viper"
 )
 
 var (
-	configFile   = flag.String("config", "", "Config file for XrayR.")
+	configFile   = flag.String("config", "/etc/Xflash/config.yml", "Config file for Xflash.")
 	printVersion = flag.Bool("version", false, "show version")
 )
 
 var (
-	version  = "0.0.1"
 	codename = "xflash"
 	intro    = "Xflashx backend based on Xray-core"
+	version  = "v0.0.7_beta"
+	codename = "Xflash"
+	intro    = "A V2board backend based on Xray-core"
 )
 
 func showVersion() {
@@ -34,33 +33,8 @@ func showVersion() {
 }
 
 func getConfig() *viper.Viper {
-	config := viper.New()
-	// Set custom path and name
-	if *configFile != "" {
-		configName := path.Base(*configFile)
-		configFileExt := path.Ext(*configFile)
-		configNameOnly := strings.TrimSuffix(configName, configFileExt)
-		configPath := path.Dir(*configFile)
-		config.SetConfigName(configNameOnly)
-		config.SetConfigType(strings.TrimPrefix(configFileExt, "."))
-		config.AddConfigPath(configPath)
-		// Set ASSET Path and Config Path for XrayR
-		os.Setenv("XRAY_LOCATION_ASSET", configPath)
-		os.Setenv("XRAY_LOCATION_CONFIG", configPath)
-	} else {
-		// Set default config path
-		config.SetConfigName("config")
-		config.SetConfigType("yml")
-		config.AddConfigPath(".")
-	}
-	if err := config.ReadInConfig(); err != nil {
-		log.Panicf("Fatal error config file: %s \n", err)
-	}
-	return config
-}
-
 func startNodes(nodes []*conf.NodeConfig, core *core.Core) error {
-	for i, _ := range nodes {
+	for i := range nodes {
 		var apiClient = panel.New(nodes[i].ApiConfig)
 		// Register controller service
 		err := node.New(core, apiClient, nodes[i].ControllerConfig).Start()
@@ -77,16 +51,15 @@ func main() {
 	if *printVersion {
 		return
 	}
-	config := getConfig()
-	c := conf.New()
-	err := config.Unmarshal(c)
+	config := conf.New()
+	err := config.LoadFromPath(*configFile)
 	if err != nil {
 		log.Panicf("can't unmarshal config file: %s \n", err)
 	}
-	x := core.New(c)
+	x := core.New(config)
 	x.Start()
 	defer x.Close()
-	err = startNodes(c.NodesConfig, x)
+	err = startNodes(config.NodesConfig, x)
 	if err != nil {
 		log.Panicf("run nodes error: %v", err)
 	}
@@ -95,7 +68,7 @@ func main() {
 	// Running backend
 	{
 		osSignals := make(chan os.Signal, 1)
-		signal.Notify(osSignals, os.Interrupt, os.Kill, syscall.SIGTERM)
+		signal.Notify(osSignals, syscall.SIGINT, syscall.SIGKILL, syscall.SIGTERM)
 		<-osSignals
 	}
 }

@@ -2,8 +2,8 @@ package core
 
 import (
 	"encoding/json"
-	io "io/ioutil"
 	"log"
+	"os"
 	"sync"
 
 	"github.com/AikoCute-Offical/xflash-backend/conf"
@@ -16,6 +16,7 @@ import (
 	"github.com/xtls/xray-core/features/inbound"
 	"github.com/xtls/xray-core/features/outbound"
 	"github.com/xtls/xray-core/features/routing"
+	statsFeature "github.com/xtls/xray-core/features/stats"
 	coreConf "github.com/xtls/xray-core/infra/conf"
 )
 
@@ -25,6 +26,7 @@ type Core struct {
 	Server     *core.Instance
 	ihm        inbound.Manager
 	ohm        outbound.Manager
+	shm        statsFeature.Manager
 	dispatcher *dispatcher.DefaultDispatcher
 }
 
@@ -54,10 +56,10 @@ func getCore(xflashConfig *conf.Conf) *core.Instance {
 	// DNS config
 	coreDnsConfig := &coreConf.DNSConfig{}
 	if xflashConfig.DnsConfigPath != "" {
-		if data, err := io.ReadFile(xflashConfig.DnsConfigPath); err != nil {
+		if f, err := os.Open(xflashConfig.DnsConfigPath); err != nil {
 			log.Panicf("Failed to read DNS config file at: %s", xflashConfig.DnsConfigPath)
 		} else {
-			if err = json.Unmarshal(data, coreDnsConfig); err != nil {
+			if err = json.NewDecoder(f).Decode(coreDnsConfig); err != nil {
 				log.Panicf("Failed to unmarshal DNS config: %s", xflashConfig.DnsConfigPath)
 			}
 		}
@@ -69,10 +71,10 @@ func getCore(xflashConfig *conf.Conf) *core.Instance {
 	// Routing config
 	coreRouterConfig := &coreConf.RouterConfig{}
 	if xflashConfig.RouteConfigPath != "" {
-		if data, err := io.ReadFile(xflashConfig.RouteConfigPath); err != nil {
+		if f, err := os.Open(xflashConfig.RouteConfigPath); err != nil {
 			log.Panicf("Failed to read Routing config file at: %s", xflashConfig.RouteConfigPath)
 		} else {
-			if err = json.Unmarshal(data, coreRouterConfig); err != nil {
+			if err = json.NewDecoder(f).Decode(coreRouterConfig); err != nil {
 				log.Panicf("Failed to unmarshal Routing config: %s", xflashConfig.RouteConfigPath)
 			}
 		}
@@ -84,10 +86,10 @@ func getCore(xflashConfig *conf.Conf) *core.Instance {
 	// Custom Inbound config
 	var coreCustomInboundConfig []coreConf.InboundDetourConfig
 	if xflashConfig.InboundConfigPath != "" {
-		if data, err := io.ReadFile(xflashConfig.InboundConfigPath); err != nil {
+		if f, err := os.Open(xflashConfig.InboundConfigPath); err != nil {
 			log.Panicf("Failed to read Custom Inbound config file at: %s", xflashConfig.OutboundConfigPath)
 		} else {
-			if err = json.Unmarshal(data, &coreCustomInboundConfig); err != nil {
+			if err = json.NewDecoder(f).Decode(&coreCustomInboundConfig); err != nil {
 				log.Panicf("Failed to unmarshal Custom Inbound config: %s", xflashConfig.OutboundConfigPath)
 			}
 		}
@@ -103,10 +105,10 @@ func getCore(xflashConfig *conf.Conf) *core.Instance {
 	// Custom Outbound config
 	var coreCustomOutboundConfig []coreConf.OutboundDetourConfig
 	if xflashConfig.OutboundConfigPath != "" {
-		if data, err := io.ReadFile(xflashConfig.OutboundConfigPath); err != nil {
+		if f, err := os.Open(xflashConfig.OutboundConfigPath); err != nil {
 			log.Panicf("Failed to read Custom Outbound config file at: %s", xflashConfig.OutboundConfigPath)
 		} else {
-			if err = json.Unmarshal(data, &coreCustomOutboundConfig); err != nil {
+			if err = json.NewDecoder(f).Decode(&coreCustomOutboundConfig); err != nil {
 				log.Panicf("Failed to unmarshal Custom Outbound config: %s", xflashConfig.OutboundConfigPath)
 			}
 		}
@@ -156,6 +158,7 @@ func (p *Core) Start() {
 	if err := p.Server.Start(); err != nil {
 		log.Panicf("Failed to start instance: %s", err)
 	}
+	p.shm = p.Server.GetFeature(statsFeature.ManagerType()).(statsFeature.Manager)
 	p.ihm = p.Server.GetFeature(inbound.ManagerType()).(inbound.Manager)
 	p.ohm = p.Server.GetFeature(outbound.ManagerType()).(outbound.Manager)
 	p.dispatcher = p.Server.GetFeature(routing.DispatcherType()).(*dispatcher.DefaultDispatcher)

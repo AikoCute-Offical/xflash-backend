@@ -3,10 +3,9 @@ package cmd
 import (
 	"bufio"
 	"fmt"
+	"github.com/AikoCute-Offical/xflash-backend/node/legoCmd/log"
 	"os"
 	"strings"
-
-	"github.com/AikoCute-Offical/xflash-backend/node/legoCmd/log"
 
 	"github.com/go-acme/lego/v4/certificate"
 	"github.com/go-acme/lego/v4/lego"

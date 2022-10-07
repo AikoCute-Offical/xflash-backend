@@ -3,10 +3,9 @@ package core
 import (
 	"context"
 	"fmt"
-
+	"github.com/AikoCute-Offical/xflash-backend/api/panel"
 	"github.com/AikoCute-Offical/xflash-backend/core/app/dispatcher"
 	"github.com/xtls/xray-core/common/protocol"
-	"github.com/xtls/xray-core/features/stats"
 	"github.com/xtls/xray-core/proxy"
 )
 
@@ -58,31 +57,41 @@ func (p *Core) RemoveUsers(users []string, tag string) error {
 	return nil
 }
 
-func (p *Core) GetUserTraffic(email string) (up int64, down int64) {
+func (p *Core) GetUserTraffic(email string, reset bool) (up int64, down int64) {
 	upName := "user>>>" + email + ">>>traffic>>>uplink"
 	downName := "user>>>" + email + ">>>traffic>>>downlink"
-	statsManager := p.Server.GetFeature(stats.ManagerType()).(stats.Manager)
-	upCounter := statsManager.GetCounter(upName)
-	downCounter := statsManager.GetCounter(downName)
-	if upCounter != nil {
-		up = upCounter.Value()
-		upCounter.Set(0)
-	}
-	if downCounter != nil {
-		down = downCounter.Value()
-		downCounter.Set(0)
+	upCounter := p.shm.GetCounter(upName)
+	downCounter := p.shm.GetCounter(downName)
+	if reset {
+		if upCounter != nil {
+			up = upCounter.Set(0)
+		}
+		if downCounter != nil {
+			down = downCounter.Set(0)
+		}
+	} else {
+		if upCounter != nil {
+			up = upCounter.Value()
+		}
+		if downCounter != nil {
+			down = downCounter.Value()
+		}
 	}
 	return up, down
 }
 
-func (p *Core) GetOnlineIps(tag string) ([]dispatcher.UserIp, error) {
-	return p.dispatcher.Limiter.GetOnlineUserIp(tag)
+func (p *Core) AddUserSpeedLimit(tag string, user *panel.UserInfo, speedLimit uint64, expire int64) error {
+	return p.dispatcher.Limiter.AddUserSpeedLimit(tag, user, speedLimit, expire)
 }
 
-func (p *Core) UpdateOnlineIps(tag string, ips []dispatcher.UserIp) {
+func (p *Core) ListOnlineIp(tag string) ([]dispatcher.UserIpList, error) {
+	return p.dispatcher.Limiter.ListOnlineUserIp(tag)
+}
+
+func (p *Core) UpdateOnlineIp(tag string, ips []dispatcher.UserIpList) {
 	p.dispatcher.Limiter.UpdateOnlineUserIP(tag, ips)
 }
 
-func (p *Core) ClearOnlineIps(tag string) {
-	p.dispatcher.Limiter.ClearOnlineUserIP(tag)
+func (p *Core) ClearOnlineIp(tag string) {
+	p.dispatcher.Limiter.ClearOnlineUserIpAndSpeedLimiter(tag)
 }

@@ -2,9 +2,8 @@ package node
 
 import (
 	"fmt"
-	"strings"
-
 	"github.com/AikoCute-Offical/xflash-backend/api/panel"
+	"strings"
 
 	"github.com/xtls/xray-core/common/protocol"
 	"github.com/xtls/xray-core/common/serial"
